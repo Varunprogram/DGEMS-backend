@@ -23,20 +23,26 @@ app.post('/news', async (req, res) => {
       tools: [{ type: 'web_search_20250305', name: 'web_search' }],
       messages: [{
         role: 'user',
-        content: `You are a startup news researcher. Search for the latest news about "${company}", a ${sector} company headquartered in ${locationHint}.
+        content: `You are a startup news researcher. Your job is to find the LATEST and MOST RECENT news about "${company}", a ${sector} company headquartered in ${locationHint}.
 
-Search using:
-1. "${company}" ${locationHint} ${sector} news 2025
-2. "${company}" funding raised investors
-3. "${company}" expansion partnership deal
+Run these specific web searches one by one:
+1. "${company}" acquisition OR acquired OR acquires 2024 OR 2025
+2. "${company}" funding OR raised OR investment OR series 2024 OR 2025
+3. "${company}" site:inc42.com OR site:yourstory.com OR site:entrackr.com OR site:economictimes.com
+4. "${company}" ${locationHint} startup news 2025
 
-IMPORTANT: Only return news about THIS specific company. Ignore companies with similar names.
-Look at: Economic Times, TechCrunch, YourStory, Inc42, Entrackr, Business Standard, Mint, Forbes India, Crunchbase.
+CRITICAL RULES:
+- Only return news about THIS exact company "${company}" — not any other company with a similar name
+- Prioritize the MOST RECENT articles first (2025 > 2024 > older)
+- If Inc42, YourStory, Entrackr or Economic Times covered this company, those MUST be included
+- Include acquisitions, fundraises, partnerships, product launches, expansions — anything newsworthy
+- Be specific: include exact amounts, investor names, acquisition targets, dates
 
 Return ONLY raw JSON, no markdown, no backticks:
-{"articles":[{"headline":"specific headline","snippet":"2-3 sentence summary with specific details like amounts and names","source":"Publication","date":"Month Year","url":"direct article url or google search url","category":"funding|expansion|partnership|general"}]}
+{"articles":[{"headline":"specific factual headline","snippet":"2-3 sentence summary with specific details like amounts, names, what happened","source":"Publication name","date":"Month Year","url":"direct article url","category":"funding|expansion|partnership|general"}]}
 
-Find up to 4 real articles. Be specific with numbers and names. Return valid JSON only.`
+Categories: funding=raised money/valuation, expansion=new markets/global, partnership=deals/tie-ups/acquisitions, general=product/awards/leadership.
+Find up to 4 real distinct articles. Return valid JSON only.`
       }]
     });
 
